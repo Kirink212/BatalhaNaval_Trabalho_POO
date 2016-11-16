@@ -20,7 +20,7 @@ public class Janela extends JFrame
 		this.getContentPane().add(p);
 		b1.setBounds(500, 500, 100, 50);
 		p.add(b1);
-		b1.addActionListener(new SelectionPanel(j));
+		b1.addActionListener(MenuJanela.getMenuJanela(j));
 		p.setLayout(null);
 	}
 	

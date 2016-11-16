@@ -1,15 +1,23 @@
-import java.awt.Graphics;
-import javax.swing.JPanel;
 
-public class SelectionJanela extends JPanel{
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class SelectionJanela extends Janela implements ActionListener{
+	private Janela j;
 	
-	public SelectionJanela() {
-		
+	public SelectionJanela(Janela j)
+	{
+		this.j = j;
 	}
 	
-	public void paintComponent(Graphics g)
-	{	
-		Matrix m = new Matrix(15, 15, 32);
-		m.drawMatrix(g, 50.0, 100.0);
+	public void actionPerformed(ActionEvent e) 
+	{
+		SelectionPanel p = new SelectionPanel();
+		this.j.setVisible(false);
+		this.setVisible(true);
+		this.getContentPane().add(p);
 	}
+
 }

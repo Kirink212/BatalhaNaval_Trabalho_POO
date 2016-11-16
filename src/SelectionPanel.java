@@ -1,24 +1,15 @@
-
-import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.JPanel;
 
-public class SelectionPanel extends Janela implements ActionListener{
-	private Janela j;
+public class SelectionPanel extends JPanel{
 	
-	public SelectionPanel(Janela j)
-	{
-		this.j = j;
+	public SelectionPanel() {
+		
 	}
 	
-	public void actionPerformed(ActionEvent e) 
-	{
-		SelectionJanela p = new SelectionJanela();
-		System.out.println("Rola no seu cu");
-		this.j.setVisible(false);
-		this.setVisible(true);
-		this.getContentPane().add(p);
+	public void paintComponent(Graphics g)
+	{	
+		Matrix m = new Matrix(15, 15, 32);
+		m.drawMatrix(g, 50.0, 100.0);
 	}
-
 }
