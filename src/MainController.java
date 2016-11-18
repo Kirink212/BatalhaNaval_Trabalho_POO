@@ -1,8 +1,10 @@
+import javax.swing.JTextField;
 
 public class MainController {
-	private int NUMTOTAL;
-	private int actualPlayer;
+	private int NUMTOTAL = 0;
+	private int actualPlayer = 0;
 	private static MainController m = null;
+	private Player p[] = new Player[2];
 	
 	public MainController()
 	{
@@ -12,20 +14,26 @@ public class MainController {
 	public static MainController getMainController(){
 		if(m == null)
 		{
-			m = new SelectionController();
+			m = new MainController();
 		}
 	   
 		return m;
 	}
 	
-	public void actions()
+	public void createPlayers(JTextField[] j)
 	{
-		
+		int i;
+		for(i=0; i<2; i++)
+		{
+			this.p[i] = new Player();
+			this.p[i].setName(j[i].getText());
+			System.out.println(j[i].getText());
+		}
 	}
 	
-	public int getActualPlayer()
+	public Player getActualPlayer()
 	{
-		return 1; //placeholder para o indice do player corrente
+		return this.p[this.actualPlayer];
 	}
 	
 	public int changeActualPlayer()
@@ -36,7 +44,6 @@ public class MainController {
 	public int getTotalNumberOfPlayers()
 	{
 		return this.NUMTOTAL;
-		
 	}
 	
 	public void addPlayer()

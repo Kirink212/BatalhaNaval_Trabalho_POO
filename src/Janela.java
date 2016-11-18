@@ -5,8 +5,8 @@ import javax.swing.*;
 public class Janela extends JFrame
 {
 	private static Janela j = null;
-	public final int  LARG_DEFAULT=1280;
-	public final int  ALT_DEFAULT=720;
+	public final int  LARG_DEFAULT=400;
+	public final int  ALT_DEFAULT=300;
 	
 	public Janela()
 	{
@@ -18,7 +18,7 @@ public class Janela extends JFrame
 	{
 		JButton b1 = new JButton("Iniciar");
 		this.getContentPane().add(p);
-		b1.setBounds(500, 500, 100, 50);
+		b1.setBounds(150, 170, 100, 50);
 		p.add(b1);
 		b1.addActionListener(MenuJanela.getMenuJanela(j));
 		p.setLayout(null);
