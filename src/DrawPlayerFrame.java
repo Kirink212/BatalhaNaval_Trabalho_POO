@@ -7,8 +7,8 @@ import javax.swing.*;
 
 public class DrawPlayerFrame {
 
-	private int LARG_DEFAULT = 400;
-	private int ALT_DEFAULT = 300;
+	private int LARG_DEFAULT = 300;
+	private int ALT_DEFAULT = 200;
 	private final int qtdJogadores = 2;
 	private int i;		
 	private JTextField j[] = new JTextField[qtdJogadores];
@@ -17,14 +17,13 @@ public class DrawPlayerFrame {
 	private JButton Inicia;
 	private Dimension size;
 	private Insets borda;
-	
-	MainController mainC = MainController.getMainController();
-	Toolkit tk = Toolkit.getDefaultToolkit();
-	Dimension screenSize = tk.getScreenSize();
-	int sl = screenSize.width;
-	int sa = screenSize.height;
-	int x = sl / 2 - LARG_DEFAULT / 2;
-	int y = sa / 2 - ALT_DEFAULT / 2;
+	private MainController mainC = MainController.getMainController();
+	private Toolkit tk = Toolkit.getDefaultToolkit();
+	private Dimension screenSize = tk.getScreenSize();
+	private int sl = screenSize.width;
+	private int sa = screenSize.height;
+	private int x = sl / 2 - LARG_DEFAULT / 2;
+	private int y = sa / 2 - ALT_DEFAULT / 2;
 	
 	
 	public void Draw_Players(MenuJanela ref,int CloseWindow)
