@@ -10,7 +10,7 @@ public class DrawWeaponsFrame {
 		
 	}
 	
-	public void drawHidroPlanes(Graphics2D g2d, double tam, double dx)
+	public void drawHidroPlanes(Graphics2D g2d, double tam, double dx, double dy)
 	{
 		int i;
 		Rectangle2D r1,r2,r3;
@@ -19,9 +19,9 @@ public class DrawWeaponsFrame {
         {
 			g2d.setPaint(Color.GREEN);
 			
-			r1 = new Rectangle2D.Double(30.0+dx,115.0,tam,tam);
-			r2 = new Rectangle2D.Double(30+tam+dx,115-tam,tam,tam);
-			r3 = new Rectangle2D.Double(30+2*tam+dx,115.0,tam,tam);
+			r1 = new Rectangle2D.Double(30.0+dx,115.0+dy,tam,tam);
+			r2 = new Rectangle2D.Double(30+tam+dx,115-tam+dy,tam,tam);
+			r3 = new Rectangle2D.Double(30+2*tam+dx,115.0+dy,tam,tam);
 			
 			g2d.fill(r1);
 			g2d.fill(r2);
@@ -32,14 +32,14 @@ public class DrawWeaponsFrame {
         dx=0;
 	}
 	
-	public void drawSubmarinos(Graphics2D g2d,double tam,double dx)
+	public void drawSubmarinos(Graphics2D g2d,double tam,double dx, double dy)
 	{
 		int i;
 		Rectangle2D r1;
 		
 		for(i=0;i<4;i++)
         {
-			r1 = new Rectangle2D.Double(30.0+dx,195.0,tam,tam);
+			r1 = new Rectangle2D.Double(30.0+dx,195.0+dy,tam,tam);
 			
 			g2d.setPaint(Color.CYAN);
 			
@@ -50,14 +50,14 @@ public class DrawWeaponsFrame {
         dx=0;
 	}
 	
-	public void drawDestroyers(Graphics2D g2d,double tam,double dx)
+	public void drawDestroyers(Graphics2D g2d,double tam,double dx,double dy)
 	{
 		int i;
 		Rectangle2D r1;
 		
 		for(i=0;i<3;i++)
         {
-			r1 = new Rectangle2D.Double(30.0+dx,285.0,2*tam,tam);
+			r1 = new Rectangle2D.Double(30.0+dx,285.0+dy,2*tam,tam);
             
 			g2d.setPaint(Color.YELLOW);
 			
@@ -70,14 +70,14 @@ public class DrawWeaponsFrame {
 		
 	}
 	
-	public void drawCruzadores(Graphics2D g2d,double tam,double dx)
+	public void drawCruzadores(Graphics2D g2d,double tam,double dx,double dy)
 	{
 		int i;
 		Rectangle2D r1;
 		
 		for(i=0;i<2;i++)
         {
-			r1= new Rectangle2D.Double(30.0+dx,375.0,4*tam,tam);
+			r1= new Rectangle2D.Double(30.0+dx,375.0+dy,4*tam,tam);
             
             g2d.setPaint(Color.ORANGE);
 			
@@ -89,11 +89,11 @@ public class DrawWeaponsFrame {
         dx=0;
 	}
 	
-	public void drawCouracado(Graphics2D g2d,double tam,double dx)
+	public void drawCouracado(Graphics2D g2d,double tam,double dx,double dy)
 	{
 		Rectangle2D r1;
 		
-		r1 = new Rectangle2D.Double(30,465.0,5*tam,tam);
+		r1 = new Rectangle2D.Double(30,465.0+dy,5*tam,tam);
 	
 		g2d.setPaint(Color.RED);
 			

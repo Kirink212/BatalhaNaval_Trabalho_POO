@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
@@ -29,18 +28,17 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         MainController main = MainController.getMainController();
         Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
         this.addMouseListener(this);
-        this.addMouseMotionListener(m);
+        this.addMouseMotionListener(this);
         DrawWeaponsFrame d = new DrawWeaponsFrame(); 
         Player p = main.getActualPlayer();
-        m.drawMatrix(g, 700.0, 80.0);
+        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0);
         Graphics2D g2d = (Graphics2D)g;
         g2d.drawString(p.getName()+",selecione uma arma na lista", 550, 635);
-        d.drawHidroPlanes(g2d, tamquadrado, dx);
-        d.drawSubmarinos(g2d, tamquadrado, dx);
-        d.drawDestroyers(g2d, tamquadrado, dx);
-        d.drawCruzadores(g2d, tamquadrado, dx);
-        d.drawCouracado(g2d, tamquadrado, dx);
-        repaint();
+        d.drawHidroPlanes(g2d, tamquadrado, dx, dy);
+        d.drawSubmarinos(g2d, tamquadrado, dx, dy);
+        d.drawDestroyers(g2d, tamquadrado, dx, dy);
+        d.drawCruzadores(g2d, tamquadrado, dx, dy);
+        d.drawCouracado(g2d, tamquadrado, dx, dy);
     }
     
     public void mouseClicked(MouseEvent me) 
@@ -53,11 +51,6 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		
 	}
 
-	public boolean mouseCollided(MouseEvent mouse, double x, double y, double w, double h) 
-	{
-		return mouse.getX() < x+w && mouse.getY() < y+h && y < mouse.getY()+1 && x < mouse.getX()+1;
-	}
-	
 	public void mouseEntered(MouseEvent me) 
 	{
 		
@@ -86,6 +79,10 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	}
 
 	public void mouseMoved(MouseEvent me) {
-		
+		 Point point = me.getPoint();
+		 System.out.println("mousePressed at " + point);
+		 this.mouseX = point.x;
+		 this.mouseY = point.y;
+		 repaint();
 	}
 }

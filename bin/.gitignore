@@ -1,3 +1,15 @@
-/Matrix.class
-/SelectionPanel.class
+/DrawPlayerFrame.class
 /DrawWeaponsFrame.class
+/Janela.class
+/Main.class
+/MainController.class
+/MainPanel.class
+/Matrix.class
+/MenuJanela.class
+/MenuPanel.class
+/MouseController.class
+/Player.class
+/SelectionController.class
+/SelectionJanela.class
+/SelectionPanel.class
+/Square.class
