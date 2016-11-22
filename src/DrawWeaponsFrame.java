@@ -19,9 +19,9 @@ public class DrawWeaponsFrame {
         {
 			g2d.setPaint(Color.GREEN);
 			
-			r1 = new Rectangle2D.Double(30.0+dx,115.0+dy,tam,tam);
-			r2 = new Rectangle2D.Double(30+tam+dx,115-tam+dy,tam,tam);
-			r3 = new Rectangle2D.Double(30+2*tam+dx,115.0+dy,tam,tam);
+			r1 = new Rectangle2D.Double(dx,115.0+dy,tam,tam);
+			r2 = new Rectangle2D.Double(tam+dx,115-tam+dy,tam,tam);
+			r3 = new Rectangle2D.Double(2*tam+dx,115.0+dy,tam,tam);
 			
 			g2d.fill(r1);
 			g2d.fill(r2);
@@ -39,7 +39,7 @@ public class DrawWeaponsFrame {
 		
 		for(i=0;i<4;i++)
         {
-			r1 = new Rectangle2D.Double(30.0+dx,195.0+dy,tam,tam);
+			r1 = new Rectangle2D.Double(dx,195.0+dy,tam,tam);
 			
 			g2d.setPaint(Color.CYAN);
 			
@@ -57,7 +57,7 @@ public class DrawWeaponsFrame {
 		
 		for(i=0;i<3;i++)
         {
-			r1 = new Rectangle2D.Double(30.0+dx,285.0+dy,2*tam,tam);
+			r1 = new Rectangle2D.Double(dx,285.0+dy,2*tam,tam);
             
 			g2d.setPaint(Color.YELLOW);
 			
@@ -77,7 +77,7 @@ public class DrawWeaponsFrame {
 		
 		for(i=0;i<2;i++)
         {
-			r1= new Rectangle2D.Double(30.0+dx,375.0+dy,4*tam,tam);
+			r1= new Rectangle2D.Double(dx,375.0+dy,4*tam,tam);
             
             g2d.setPaint(Color.ORANGE);
 			
@@ -93,7 +93,7 @@ public class DrawWeaponsFrame {
 	{
 		Rectangle2D r1;
 		
-		r1 = new Rectangle2D.Double(30,465.0+dy,5*tam,tam);
+		r1 = new Rectangle2D.Double(dx,dy,5*tam,tam);
 	
 		g2d.setPaint(Color.RED);
 			

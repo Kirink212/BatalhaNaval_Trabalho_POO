@@ -17,7 +17,7 @@ public class Matrix{
 		this.tileSize = tile;
 	}
 	
-	public void drawMatrix(Graphics g, double mouse_x, double mouse_y, double offset_x, double offset_y)
+	public void drawMatrix(Graphics g, double mouse_x, double mouse_y, double offset_x, double offset_y, double actual_w, double actual_h)
 	{
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setPaint(Color.BLACK);
@@ -43,7 +43,7 @@ public class Matrix{
 				
 				q[i][j] = new Square(this.tileSize*j+offset_x, this.tileSize*i+offset_y, false);
 				
-				if(this.mouseCollided(mouse_x, mouse_y, q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
+				if(this.weaponCollided(mouse_x, mouse_y, actual_w, actual_h, q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
 				{
 					g2d.setPaint(Color.RED);
 					g2d.fill(r1);
@@ -54,8 +54,21 @@ public class Matrix{
 		
 	}
 
+	
+	public boolean weaponCollided( double mouse_x, double mouse_y, double weapon_w, double weapon_h, double x, double y, double w, double h) 
+	{
+			return (
+						x + (w / 2) >= mouse_x &&
+						x + (w / 2) < mouse_x + weapon_w && 
+						
+						y <= mouse_y + (weapon_h / 2) &&
+						y + h > mouse_y + (weapon_h / 2) 
+						
+					);
+	}
+	
 	public boolean mouseCollided( double mouse_x, double mouse_y, double x, double y, double w, double h) 
 	{
-		return (mouse_x < x+w && mouse_y < y+h && y < mouse_y+1 && x < mouse_x+1);
+		return (mouse_x <= x+w && mouse_y <= y+h && y <= mouse_y+1 && x <= mouse_x+1);
 	}
 }
