@@ -18,6 +18,9 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	private int actualWeapon = -1;
 	DrawWeaponsFrame d = new DrawWeaponsFrame();
 	private double dx=30,dy=0;
+	private int index = 0;
+	private int tipo_atual = 0;
+	private int qtdTipo[] = new int[5];
 	
     public SelectionPanel() {
         
@@ -26,28 +29,48 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     public void paintComponent(Graphics g)
     {
     	super.paintComponent(g);
+    	double aux_x, aux_y;
+    	int aux_tipo, aux_index = 0;
         MainController main = MainController.getMainController();
         Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
         this.addMouseListener(this);
         this.addMouseMotionListener(this); 
         Player p = main.getActualPlayer();
         Graphics2D g2d = (Graphics2D)g;
-        for(int i=0; i<15; i++)
+        this.qtdTipo[0] = 5;
+    	this.qtdTipo[1] = 4;
+    	this.qtdTipo[2] = 3;
+    	this.qtdTipo[3] = 2;
+    	this.qtdTipo[4] = 1;
+        
+        for(int i=0; i<5; i++)
     	{
-    		weapons[i] = new Square(-1, -1, -1, -1, false);
+    		while(aux_index < this.qtdTipo[i])
+    		{
+    			if(i == 0)
+    			{
+    				weapons[index] = new Square(30, 0, 3*tamquadrado, 2*tamquadrado, false, i);
+    			}
+    			else
+    			{
+    				weapons[index] = new Square(30, 0, i*tamquadrado, tamquadrado, false, i);
+    			}
+    			aux_x = weapons[this.index].getX()+125;
+    			aux_y = weapons[this.index].getY()+80*i;
+    			weapons[this.index].setX(aux_x);
+    			weapons[this.index].setY(aux_y);
+    			index++;
+    			aux_index++;
+    		}
     	}
+        
         g2d.drawString(p.getName()+",selecione uma arma na lista", 550, 635);
-        d.drawHidroPlanes(g2d, tamquadrado, (weapons[0].isEmpty())? dx : weapons[0].getX(), (weapons[0].isEmpty())? dy : weapons[0].getY());
-        d.drawSubmarinos(g2d, tamquadrado,(weapons[0].isEmpty())? dx : weapons[0].getX(), (weapons[5].isEmpty())? dy : weapons[0].getY());
-        d.drawDestroyers(g2d, tamquadrado, (weapons[0].isEmpty())? dx : weapons[0].getX(), (weapons[9].isEmpty())? dy : weapons[0].getY());
-        d.drawCruzadores(g2d, tamquadrado, (weapons[0].isEmpty())? dx : weapons[0].getX(), (weapons[12].isEmpty())? dy : weapons[0].getY());
-        d.drawCouracado(g2d, tamquadrado, (weapons[0].isEmpty())? dx : weapons[0].getX(), (weapons[14].isEmpty())? dy : weapons[0].getY());
-        for(int i=0; i<15; i++)
-    	{
-    		weapons[i].setX(d.getVectorXPosition(i));
-    		weapons[i].setY(d.getVectorYPosition(i));
-    		weapons[i].setCollided(false);
-    	}
+        d.drawHidroPlanes(g2d, tamquadrado, weapons[0].getX(), weapons[0].getY());
+        d.drawSubmarinos(g2d, tamquadrado,weapons[5].getX(), weapons[5].getY());
+        d.drawDestroyers(g2d, tamquadrado, weapons[9].getX(), weapons[9].getY());
+        d.drawCruzadores(g2d, tamquadrado, weapons[12].getX(), weapons[12].getY());
+        d.drawCouracado(g2d, tamquadrado, weapons[14].getX(), weapons[14].getY());
+        
         m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, weapons[this.actualWeapon].getWidth(),weapons[this.actualWeapon].getHeight());
     }
     

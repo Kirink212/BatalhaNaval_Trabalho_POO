@@ -41,7 +41,7 @@ public class Matrix{
 				g2d.setPaint(Color.BLACK);
 				g2d.draw(r1);
 				
-				q[i][j] = new Square(this.tileSize*j+offset_x, this.tileSize*i+offset_y, this.tileSize, this.tileSize, false);
+				q[i][j] = new Square(this.tileSize*j+offset_x, this.tileSize*i+offset_y, this.tileSize, this.tileSize, false, -1);
 				
 				if(this.weaponCollided(mouse_x, mouse_y, actual_w, actual_h, q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
 				{
