@@ -17,7 +17,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	private Square weapons[] = new Square[15];
 	private int actualWeapon = -1;
 	DrawWeaponsFrame d = new DrawWeaponsFrame();
-	private double dx=30,dy=0;
+	private double dx=0,dy=0;
 	private int index = 0;
 	private int tipo_atual = 0;
 	private int qtdTipo[] = new int[5];
@@ -49,29 +49,30 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     		{
     			if(i == 0)
     			{
-    				weapons[index] = new Square(30, 0, 3*tamquadrado, 2*tamquadrado, false, i);
+    				weapons[this.index] = new Square(30, 115, 3*tamquadrado, 2*tamquadrado, false, i);
     			}
     			else
     			{
-    				weapons[index] = new Square(30, 0, i*tamquadrado, tamquadrado, false, i);
+    				weapons[this.index] = new Square(30, 115, i*tamquadrado, tamquadrado, false, i);
     			}
-    			aux_x = weapons[this.index].getX()+125;
+    			aux_x = weapons[this.index].getX()+125*(aux_index+1);
     			aux_y = weapons[this.index].getY()+80*i;
     			weapons[this.index].setX(aux_x);
     			weapons[this.index].setY(aux_y);
-    			index++;
+    			this.index++;
     			aux_index++;
     		}
+    		aux_index = 0;
     	}
-        
+        //System.out.println(weapons[4].getX());
         g2d.drawString(p.getName()+",selecione uma arma na lista", 550, 635);
-        d.drawHidroPlanes(g2d, tamquadrado, weapons[0].getX(), weapons[0].getY());
-        d.drawSubmarinos(g2d, tamquadrado,weapons[5].getX(), weapons[5].getY());
-        d.drawDestroyers(g2d, tamquadrado, weapons[9].getX(), weapons[9].getY());
-        d.drawCruzadores(g2d, tamquadrado, weapons[12].getX(), weapons[12].getY());
-        d.drawCouracado(g2d, tamquadrado, weapons[14].getX(), weapons[14].getY());
+        d.drawHidroPlanes(g2d, tamquadrado,weapons);
+        d.drawSubmarinos(g2d, tamquadrado,weapons);
+        d.drawDestroyers(g2d, tamquadrado, weapons);
+        d.drawCruzadores(g2d, tamquadrado, weapons);
+        d.drawCouracado(g2d, tamquadrado, weapons);
         
-        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, weapons[this.actualWeapon].getWidth(),weapons[this.actualWeapon].getHeight());
+        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, (this.actualWeapon != -1)? weapons[this.actualWeapon].getWidth():0,(this.actualWeapon != -1)? weapons[this.actualWeapon].getHeight():0);
     }
     
     public int findWeapon(Square s[], double mouseY, double mouseX)
