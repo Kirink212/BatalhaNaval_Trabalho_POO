@@ -30,8 +30,8 @@ public class DrawWeaponsFrame {
 				{
 					g2d.setPaint(weapons[this.index][0].getColor());
 				}
-				r[i] = new Rectangle2D.Double(weapons[this.index][j].getX(),weapons[this.index][j].getY(),tam,tam);
-				g2d.fill(r[i]);
+				r[j] = new Rectangle2D.Double(weapons[this.index][j].getX(),weapons[this.index][j].getY(),tam,tam);
+				g2d.fill(r[j]);
 			}
 			
 			this.index++;
