@@ -11,36 +11,43 @@ public class DrawWeaponsFrame {
 		
 	}
 	
-	public void drawHidroPlanes(Graphics2D g2d, double tam,Square weapons[])
+	public void drawHidroPlanes(Graphics2D g2d, double tam,Square weapons[][])
 	{
-		int i;
-		Rectangle2D r1,r2,r3;
+		int i, j;
+		Rectangle2D r[] = new Rectangle2D[6];
 		
 		for(i=0;i<5;i++)
         {
-			g2d.setPaint(weapons[this.index].getColor());
+			g2d.setPaint(weapons[this.index][0].getColor());
 			
-			r1 = new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),tam,tam);
-			r2 = new Rectangle2D.Double(tam+weapons[this.index].getX(),-tam+weapons[this.index].getY(),tam,tam);
-			r3 = new Rectangle2D.Double(2*tam+weapons[this.index].getX(), weapons[this.index].getY(), tam,tam);
+			for(j=0;j<6;j++)
+			{
+				if(j % 2 == 0)
+				{
+					g2d.setPaint(new Color(255,255,255,0));
+				}
+				else
+				{
+					g2d.setPaint(weapons[this.index][0].getColor());
+				}
+				r[i] = new Rectangle2D.Double(weapons[this.index][j].getX(),weapons[this.index][j].getY(),tam,tam);
+				g2d.fill(r[i]);
+			}
 			
-			g2d.fill(r1);
-			g2d.fill(r2);
-			g2d.fill(r3);
 			this.index++;
         }
 	}
 	
-	public void drawSubmarinos(Graphics2D g2d,double tam,Square weapons[])
+	public void drawSubmarinos(Graphics2D g2d,double tam,Square weapons[][])
 	{
 		int i;
 		Rectangle2D r1;
 		
 		for(i=0;i<4;i++)
         {	
-			r1 = new Rectangle2D.Double(weapons[this.index].getX() , weapons[this.index].getY(),tam,tam);
+			r1 = new Rectangle2D.Double(weapons[this.index][0].getX() , weapons[this.index][0].getY(),tam,tam);
 			
-			g2d.setPaint(weapons[this.index].getColor());
+			g2d.setPaint(weapons[this.index][0].getColor());
 			
             g2d.fill(r1);
             
@@ -48,16 +55,16 @@ public class DrawWeaponsFrame {
         }
 	}
 	
-	public void drawDestroyers(Graphics2D g2d,double tam,Square weapons[])
+	public void drawDestroyers(Graphics2D g2d,double tam,Square weapons[][])
 	{
 		int i;
 		Rectangle2D r1;
 		
 		for(i=0;i<3;i++)
         {
-			r1 = new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),2*tam,tam);
+			r1 = new Rectangle2D.Double(weapons[this.index][0].getX(),weapons[this.index][0].getY(),2*tam,tam);
             
-			g2d.setPaint(weapons[this.index].getColor());
+			g2d.setPaint(weapons[this.index][0].getColor());
 			
             g2d.fill(r1);
 
@@ -66,16 +73,16 @@ public class DrawWeaponsFrame {
 		
 	}
 	
-	public void drawCruzadores(Graphics2D g2d,double tam,Square weapons[])
+	public void drawCruzadores(Graphics2D g2d,double tam,Square weapons[][])
 	{
 		int i;
 		Rectangle2D r1;
 		
 		for(i=0;i<2;i++)
         {
-			r1= new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),4*tam,tam);
+			r1= new Rectangle2D.Double(weapons[this.index][0].getX(),weapons[this.index][0].getY(),4*tam,tam);
             
-            g2d.setPaint(weapons[this.index].getColor());
+            g2d.setPaint(weapons[this.index][0].getColor());
 			
             g2d.fill(r1);
 			
@@ -83,13 +90,13 @@ public class DrawWeaponsFrame {
         }
 	}
 	
-	public void drawCouracado(Graphics2D g2d,double tam,Square weapons[])
+	public void drawCouracado(Graphics2D g2d,double tam,Square weapons[][])
 	{
 		Rectangle2D r1;
 		
-		r1 = new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),5*tam,tam);
+		r1 = new Rectangle2D.Double(weapons[this.index][0].getX(),weapons[this.index][0].getY(),5*tam,tam);
 	
-		g2d.setPaint(weapons[this.index].getColor());
+		g2d.setPaint(weapons[this.index][0].getColor());
 		
         g2d.fill(r1);
         

@@ -15,7 +15,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     private boolean pressed = false;
 	private double mouseX;
 	private double mouseY;
-	private Square weapons[] = new Square[15];
+	private Square weapons[][] = new Square[15][6];
 	private int actualWeapon = -1;
 	private DrawWeaponsFrame d = new DrawWeaponsFrame();
 	private double dx=0,dy=0;
@@ -34,7 +34,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     	double aux_x, aux_y;
     	int aux_tipo, aux_index = 0;
     	double increment;
-    	int i;
+    	int i, j;
         MainController main = MainController.getMainController();
         Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
         this.addMouseListener(this);
@@ -52,7 +52,6 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         this.colorTipo[3] = Color.ORANGE;
         this.colorTipo[4] = Color.RED;
         
-    	System.out.println(weapons[0]);
     	if(ArrayisEmpty(weapons, 15))
     	{
 	        for(i=0; i<5; i++)
@@ -61,17 +60,40 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	    		{
 	    			if(i == 0)
 	    			{
-	    				weapons[this.index] = new Square(30, 115, 3*tamquadrado, 2*tamquadrado, false, i, this.colorTipo[i]);
+	    				for(j=0; j<6; j++)
+	    				{
+	    					if(j < 3)
+	    					{
+	    						weapons[this.index][j] = new Square(30+j*tamquadrado, 115, tamquadrado, tamquadrado, false, i, this.colorTipo[i]);
+	    					}
+	    					else
+	    					{
+	    						weapons[this.index][j] = new Square(30+(j-3)*tamquadrado, 115+tamquadrado, tamquadrado, tamquadrado, false, i, this.colorTipo[i]);
+	    					}
+	    				}
 	    			}
 	    			else
 	    			{
-	    				weapons[this.index] = new Square(30, 115, i*tamquadrado, tamquadrado, false, i, this.colorTipo[i]);
+	    				weapons[this.index][0] = new Square(30, 115, i*tamquadrado, tamquadrado, false, i, this.colorTipo[i]);
 	    			}
 	    			increment = (i == 3 && aux_index == 1)? 125 : 0;
-	    			aux_x = weapons[this.index].getX()+125*(aux_index)+increment ;
-	    			aux_y = weapons[this.index].getY()+80*i;
-	    			weapons[this.index].setX(aux_x);
-	    			weapons[this.index].setY(aux_y);
+	    			if(i==0)
+	    			{
+	    				for(j=0; j<6; j++)
+	    				{
+			    			aux_x = weapons[this.index][j].getX()+125*(aux_index) + increment;
+			    			aux_y = weapons[this.index][j].getY()+80*i;
+			    			weapons[this.index][j].setX(aux_x);
+			    			weapons[this.index][j].setY(aux_y);
+	    				}
+	    			}
+	    			else
+	    			{
+	    				aux_x = weapons[this.index][0].getX()+125*(aux_index) + increment;
+		    			aux_y = weapons[this.index][0].getY()+80*i;
+		    			weapons[this.index][0].setX(aux_x);
+		    			weapons[this.index][0].setY(aux_y);
+	    			}
 	    			this.index++;
 	    			aux_index++;
 	    		}
@@ -86,14 +108,14 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         d.drawCruzadores(g2d, tamquadrado, weapons);
         d.drawCouracado(g2d, tamquadrado, weapons);
         
-        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, (this.actualWeapon != -1)? weapons[this.actualWeapon].getWidth() : 0, (this.actualWeapon != -1)? weapons[this.actualWeapon].getHeight() : 0,(this.actualWeapon != -1)? weapons[this.actualWeapon].getColor() : Color.RED);
+        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, (this.actualWeapon != -1)? weapons[this.actualWeapon][0].getWidth() : 0, (this.actualWeapon != -1)? weapons[this.actualWeapon][0].getHeight() : 0,(this.actualWeapon != -1)? weapons[this.actualWeapon][0].getColor() : Color.RED);
     }
     
-    public boolean ArrayisEmpty(Square s[], int tam)
+    public boolean ArrayisEmpty(Square s[][], int tam)
     {
     	for(int i=0; i<tam; i++)
     	{
-    		if(s[i] != null)
+    		if(s[i][0] != null)
     		{
     			return false;
     		}
@@ -101,13 +123,20 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     	return true;
     }
     
-    public int findWeapon(Square s[], int tam, double mouseY, double mouseX)
+    public int findWeapon(Square s[][], int tam, double mouseY, double mouseX)
     {
     	for(int i=0; i<15; i++)
     	{
-    		if(mouseCollided( this.mouseX, this.mouseY, s[i].getX(), s[i].getY(),  s[i].getWidth(),  s[i].getHeight()))
+    		if(i != 0 && mouseCollided( this.mouseX, this.mouseY, s[i][0].getX(), s[i][0].getY(),  s[i][0].getWidth(),  s[i][0].getHeight()))
     		{
     			return i;
+    		}
+    		else if(i == 0)
+    		{
+				if(mouseCollided( this.mouseX, this.mouseY, s[i][0].getX(), s[i][0].getY(),  s[i][0].getWidth()*3,  s[i][0].getHeight()*2))
+	    		{
+	    			return i;
+	    		}
     		}
     	}
 		return -1;
@@ -130,7 +159,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 
 	public void mousePressed(MouseEvent me) 
 	{
-		 int index;
+		 int index, j;
 		 Point point = me.getPoint();
 		 System.out.println("mousePressed at " + point);
 		 this.mouseX = point.x;
@@ -138,10 +167,28 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 index = findWeapon(weapons, 15, this.mouseY, this.mouseX);
 		 if(index != -1)
 		 {
-			weapons[index].setX(this.mouseX);
-			weapons[index].setY(this.mouseY);
-			weapons[index].setCollided(true);
+			weapons[index][0].setX(this.mouseX);
+			weapons[index][0].setY(this.mouseY);
+			weapons[index][0].setCollided(true);
 			this.actualWeapon = index;
+		 }
+		 else if(index == 0)
+		 {
+			 for(j=0; j<6; j++)
+			 {
+				if(j < 3)
+				{
+					weapons[index][j].setX(this.mouseX+j*this.tamquadrado);
+					weapons[index][j].setY(this.mouseY);
+				}
+				else
+				{
+					weapons[index][j].setX(this.mouseX+(j-3)*this.tamquadrado);
+					weapons[index][j].setY(this.mouseY+this.tamquadrado);
+				}
+				weapons[index][j].setCollided(true);
+				this.actualWeapon = index;
+			 }
 		 }
 	}
 	public void mouseReleased(MouseEvent me)
@@ -154,18 +201,39 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	}
 
 	public void mouseMoved(MouseEvent me) {
+		 int j;
 		 Point point = me.getPoint();
 		 System.out.println("mouseMoved at " + point);
 		 this.mouseX = point.x;
 		 this.mouseY = point.y;
 		 if(this.actualWeapon != -1)
 		 {
-			 if(weapons[this.actualWeapon].getCollided())
+			 if(weapons[this.actualWeapon][0].getCollided())
 			 {
-				 weapons[this.actualWeapon].setX(this.mouseX);
-				 weapons[this.actualWeapon].setY(this.mouseY);
+				 weapons[this.actualWeapon][0].setX(this.mouseX);
+				 weapons[this.actualWeapon][0].setY(this.mouseY);
 			 }
 		 }
+		 else if(this.actualWeapon == 0)
+		 {
+			 for(j=0; j<6; j++)
+			 {
+				 if(weapons[this.actualWeapon][j].getCollided())
+				 {
+					 if(j < 3)
+					 {
+						weapons[index][j].setX(this.mouseX+j*this.tamquadrado);
+						weapons[index][j].setY(this.mouseY);
+					 }
+					 else
+					 {
+						weapons[index][j].setX(this.mouseX+(j-3)*this.tamquadrado);
+						weapons[index][j].setY(this.mouseY+this.tamquadrado);
+					 }
+				 }
+			 }
+		 }
+		 this.removeAll(); 
 		 this.repaint();
 	}
 	
