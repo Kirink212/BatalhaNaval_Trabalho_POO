@@ -18,7 +18,7 @@ public class DrawWeaponsFrame {
 		
 		for(i=0;i<5;i++)
         {
-			g2d.setPaint(Color.GREEN);
+			g2d.setPaint(weapons[this.index].getColor());
 			
 			r1 = new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),tam,tam);
 			r2 = new Rectangle2D.Double(tam+weapons[this.index].getX(),-tam+weapons[this.index].getY(),tam,tam);
@@ -40,7 +40,7 @@ public class DrawWeaponsFrame {
         {	
 			r1 = new Rectangle2D.Double(weapons[this.index].getX() , weapons[this.index].getY(),tam,tam);
 			
-			g2d.setPaint(Color.CYAN);
+			g2d.setPaint(weapons[this.index].getColor());
 			
             g2d.fill(r1);
             
@@ -57,7 +57,7 @@ public class DrawWeaponsFrame {
         {
 			r1 = new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),2*tam,tam);
             
-			g2d.setPaint(Color.YELLOW);
+			g2d.setPaint(weapons[this.index].getColor());
 			
             g2d.fill(r1);
 
@@ -75,7 +75,7 @@ public class DrawWeaponsFrame {
         {
 			r1= new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),4*tam,tam);
             
-            g2d.setPaint(Color.ORANGE);
+            g2d.setPaint(weapons[this.index].getColor());
 			
             g2d.fill(r1);
 			
@@ -89,10 +89,10 @@ public class DrawWeaponsFrame {
 		
 		r1 = new Rectangle2D.Double(weapons[this.index].getX(),weapons[this.index].getY(),5*tam,tam);
 	
-		g2d.setPaint(Color.RED);
+		g2d.setPaint(weapons[this.index].getColor());
 		
         g2d.fill(r1);
         
-        //this.index++;
+        this.index=0;
 	}
 }

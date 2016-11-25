@@ -17,7 +17,7 @@ public class Matrix{
 		this.tileSize = tile;
 	}
 	
-	public void drawMatrix(Graphics g, double mouse_x, double mouse_y, double offset_x, double offset_y, double actual_w, double actual_h)
+	public void drawMatrix(Graphics g, double mouse_x, double mouse_y, double offset_x, double offset_y, double actual_w, double actual_h, Color color)
 	{
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setPaint(Color.BLACK);
@@ -41,13 +41,14 @@ public class Matrix{
 				g2d.setPaint(Color.BLACK);
 				g2d.draw(r1);
 				
-				q[i][j] = new Square(this.tileSize*j+offset_x, this.tileSize*i+offset_y, this.tileSize, this.tileSize, false, -1);
+				q[i][j] = new Square(this.tileSize*j+offset_x, this.tileSize*i+offset_y, this.tileSize, this.tileSize, false, -1, Color.WHITE);
 				
 				if(this.weaponCollided(mouse_x, mouse_y, actual_w, actual_h, q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
 				{
-					g2d.setPaint(Color.RED);
+					g2d.setPaint(color);
 					g2d.fill(r1);
 				}
+				
 				g2d.setPaint(Color.BLACK);
 			}
 		}

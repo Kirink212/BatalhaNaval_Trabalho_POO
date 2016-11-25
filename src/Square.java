@@ -1,3 +1,4 @@
+import java.awt.Color;
 
 public class Square {
 	private double x = -1;
@@ -6,8 +7,9 @@ public class Square {
 	private double h = -1;
 	private boolean collided = false;
 	private int tipo;
+	private Color cor;
 	
-	public Square(double x, double y, double w, double h, boolean col, int tipo)
+	public Square(double x, double y, double w, double h, boolean col, int tipo, Color cor)
 	{
 		this.collided = col;
 		this.x = x;
@@ -15,6 +17,7 @@ public class Square {
 		this.w = w;
 		this.h = h;
 		this.tipo = tipo;
+		this.cor = cor;
 	}
 	
 	public double getX()
@@ -45,6 +48,11 @@ public class Square {
 	public int getTipo()
 	{
 		return this.tipo;
+	}
+	
+	public Color getColor()
+	{
+		return this.cor;
 	}
 	
 	public void setX(double x)
