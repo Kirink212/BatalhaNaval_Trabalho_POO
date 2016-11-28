@@ -5,6 +5,7 @@ public class MainController {
 	private int actualPlayer = 0;
 	private static MainController m = null;
 	private Player p[] = new Player[2];
+	public static Square matrix[][] = new Square[15][15];
 	
 	public MainController()
 	{

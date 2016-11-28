@@ -65,6 +65,16 @@ public class Square {
 		this.y = y;
 	}
 	
+	public void setWidth(double w)
+	{
+		this.w = w;
+	}
+	
+	public void setHeight(double h)
+	{
+		this.h = h;
+	}
+	
 	public void setTipo(int t)
 	{
 		this.tipo = t;
@@ -73,6 +83,11 @@ public class Square {
 	public void setCollided(boolean b)
 	{
 		this.collided = b;
+	}
+	
+	public void setColor(Color c)
+	{
+		this.cor = c;
 	}
 
 	public boolean isEmpty() {

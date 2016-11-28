@@ -18,11 +18,14 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	private Square weapons[][] = new Square[15][6];
 	private int actualWeapon = -1;
 	private DrawWeaponsFrame d = new DrawWeaponsFrame();
-	private double dx=0,dy=0;
+	private double previousX,previousY;
 	private int index = 0;
 	private int tipo_atual = 0;
 	private int qtdTipo[] = new int[5];
 	private Color colorTipo[] = new Color[5];
+	private Color transparente = new Color(255,255,255,0);
+	private boolean registerWeapon[] = new boolean [16];
+	private Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
 	
     public SelectionPanel() {
         
@@ -36,7 +39,6 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     	double increment;
     	int i, j;
         MainController main = MainController.getMainController();
-        Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
         this.addMouseListener(this);
         this.addMouseMotionListener(this); 
         Player p = main.getActualPlayer();
@@ -64,11 +66,13 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	    				{
 	    					if(j < 3)
 	    					{
-	    						weapons[this.index][j] = new Square(30+j*tamquadrado, 115, tamquadrado, tamquadrado, false, i, this.colorTipo[i]);
+	    						weapons[this.index][j] = (j%2 != 0)? new Square(30+j*tamquadrado, 115, tamquadrado, tamquadrado, false, i, this.colorTipo[i]) 
+	    								: new Square(30+j*tamquadrado, 115, 0, 0, false, i, transparente);
 	    					}
 	    					else
 	    					{
-	    						weapons[this.index][j] = new Square(30+(j-3)*tamquadrado, 115+tamquadrado, tamquadrado, tamquadrado, false, i, this.colorTipo[i]);
+	    						weapons[this.index][j] = (j%2 != 0)? new Square(30+(j-3)*tamquadrado, 115+tamquadrado, tamquadrado, tamquadrado, false, i, this.colorTipo[i])
+	    								: new Square(30+(j-3)*tamquadrado, 115+tamquadrado, 0, 0, false, i, transparente);
 	    					}
 	    				}
 	    			}
@@ -108,7 +112,8 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         d.drawCruzadores(g2d, tamquadrado, weapons);
         d.drawCouracado(g2d, tamquadrado, weapons);
         
-        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, (this.actualWeapon != -1)? weapons[this.actualWeapon][0].getWidth() : 0, (this.actualWeapon != -1)? weapons[this.actualWeapon][0].getHeight() : 0,(this.actualWeapon != -1)? weapons[this.actualWeapon][0].getColor() : Color.RED);
+        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0,weapons,this.actualWeapon, this.registerWeapon);
+  
     }
     
     public boolean ArrayisEmpty(Square s[][], int tam)
@@ -127,16 +132,17 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     {
     	for(int i=0; i<15; i++)
     	{
-    		if(i != 0 && mouseCollided( this.mouseX, this.mouseY, s[i][0].getX(), s[i][0].getY(),  s[i][0].getWidth(),  s[i][0].getHeight()))
+    		if(i>= 0 && i<= 4)
     		{
-    			return i;
-    		}
-    		else if(i == 0)
-    		{
-				if(mouseCollided( this.mouseX, this.mouseY, s[i][0].getX(), s[i][0].getY(),  s[i][0].getWidth()*3,  s[i][0].getHeight()*2))
+				if(mouseCollided( this.mouseX, this.mouseY, s[i][0].getX(), s[i][0].getY(),  s[i][1].getWidth()*3,  s[i][1].getHeight()*2))
 	    		{
 	    			return i;
 	    		}
+    		}
+    		
+    		else if(i != 0 && mouseCollided( this.mouseX, this.mouseY, s[i][0].getX(), s[i][0].getY(),  s[i][0].getWidth(),  s[i][0].getHeight()))
+    		{
+    			return i;
     		}
     	}
 		return -1;
@@ -165,15 +171,11 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 this.mouseX = point.x;
 		 this.mouseY = point.y;
 		 index = findWeapon(weapons, 15, this.mouseY, this.mouseX);
-		 if(index != -1)
+		 
+		 if(index >=0 && index <= 4)
 		 {
-			weapons[index][0].setX(this.mouseX);
-			weapons[index][0].setY(this.mouseY);
-			weapons[index][0].setCollided(true);
-			this.actualWeapon = index;
-		 }
-		 else if(index == 0)
-		 {
+			 this.previousX = weapons[index][0].getX();
+			 this.previousY = weapons[index][0].getY();
 			 for(j=0; j<6; j++)
 			 {
 				if(j < 3)
@@ -190,6 +192,22 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 				this.actualWeapon = index;
 			 }
 		 }
+		 else if(index != -1)
+		 {
+			this.previousX = weapons[index][0].getX();
+			this.previousY = weapons[index][0].getY();
+			weapons[index][0].setX(this.mouseX);
+			weapons[index][0].setY(this.mouseY);
+			weapons[index][0].setCollided(true);
+			this.actualWeapon = index;
+		 }
+		 
+		 if(index != -1 && mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
+ 		 {
+ 			this.registerWeapon[index+1] = true;
+ 			this.removeAll(); 
+ 			this.repaint();
+ 		 }
 	}
 	public void mouseReleased(MouseEvent me)
 	{
@@ -206,15 +224,8 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 System.out.println("mouseMoved at " + point);
 		 this.mouseX = point.x;
 		 this.mouseY = point.y;
-		 if(this.actualWeapon != -1)
-		 {
-			 if(weapons[this.actualWeapon][0].getCollided())
-			 {
-				 weapons[this.actualWeapon][0].setX(this.mouseX);
-				 weapons[this.actualWeapon][0].setY(this.mouseY);
-			 }
-		 }
-		 else if(this.actualWeapon == 0)
+		 
+		 if(this.actualWeapon >=0 && this.actualWeapon <= 4)
 		 {
 			 for(j=0; j<6; j++)
 			 {
@@ -222,17 +233,42 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 				 {
 					 if(j < 3)
 					 {
-						weapons[index][j].setX(this.mouseX+j*this.tamquadrado);
-						weapons[index][j].setY(this.mouseY);
+						weapons[this.actualWeapon][j].setX(this.mouseX+j*this.tamquadrado);
+						weapons[this.actualWeapon][j].setY(this.mouseY);
 					 }
 					 else
 					 {
-						weapons[index][j].setX(this.mouseX+(j-3)*this.tamquadrado);
-						weapons[index][j].setY(this.mouseY+this.tamquadrado);
+						weapons[this.actualWeapon][j].setX(this.mouseX+(j-3)*this.tamquadrado);
+						weapons[this.actualWeapon][j].setY(this.mouseY+this.tamquadrado);
 					 }
 				 }
 			 }
 		 }
+		 else if(this.actualWeapon != -1)
+		 {
+			 if(weapons[this.actualWeapon][0].getCollided())
+			 {
+				 weapons[this.actualWeapon][0].setX(this.mouseX);
+				 weapons[this.actualWeapon][0].setY(this.mouseY);
+			 }
+		 }
+		 
+		 if(this.registerWeapon[this.actualWeapon+1])
+		 {
+			 weapons[this.actualWeapon][0].setX(-1);
+			 weapons[this.actualWeapon][0].setY(-1);
+			 weapons[this.actualWeapon][0].setWidth(0);
+			 weapons[this.actualWeapon][0].setHeight(0);
+			 weapons[this.actualWeapon][0].setCollided(false);
+			 //weapons[this.actualWeapon][0].setY(-1);
+			 this.actualWeapon = -1;
+		 }
+		 
+		 for(int m=0; m<16; m++)
+		 {
+			 System.out.println(this.registerWeapon[m]);
+		 }
+		 
 		 this.removeAll(); 
 		 this.repaint();
 	}

@@ -1,9 +1,8 @@
 public class Main {
 	public static void main(String[] args)
 	{
-		MainPanel p = new MainPanel();
 		Janela f = Janela.getJanela();
-		f.draw(p);
+		f.draw();
 	}
 	
 	public void load()

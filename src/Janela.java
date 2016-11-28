@@ -22,15 +22,16 @@ public class Janela extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public void draw(JPanel p)
+	public void draw()
 	{
+		MainPanel p = new MainPanel(); 	// Chama o primeiro panel que desenha a tela inicial//
 		j.setBounds(x, y, LARG_DEFAULT, ALT_DEFAULT);
 		j.setTitle("Batalha Naval =)");
 		JButton b1 = new JButton("Iniciar");
 		this.getContentPane().add(p);
 		b1.setBounds(140,180, 100, 50);
 		p.add(b1);
-		b1.addActionListener(MenuJanela.getMenuJanela(j));
+		b1.addActionListener(new MenuJanela(Janela.getJanela())); //Coloca como evento o próximo panel que deve ser desenhado//
 		p.setLayout(null);
 		
 		j.setVisible(true);
