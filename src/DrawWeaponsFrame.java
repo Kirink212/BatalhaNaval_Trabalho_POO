@@ -11,17 +11,13 @@ public class DrawWeaponsFrame {
 		
 	}
 	
-	public void drawHidroPlanes(Graphics2D g2d, double tam,Square weapons[][])
+	public void drawHidroPlanes(Graphics2D g2d, double tam,Square weapons[][], boolean[] rotate)
 	{
 		int i, j;
 		Rectangle2D r[] = new Rectangle2D[6];
 		
 		for(i=0;i<5;i++)
 		{
-			if(i==0)
-			{
-				//g2d.rotate(Math.toRadians(45));
-			}
 			for(j=0;j<6;j++)
 			{
 				g2d.setPaint(weapons[this.index][j].getColor());
@@ -31,15 +27,11 @@ public class DrawWeaponsFrame {
 					g2d.fill(r[j]);
 				}
 			}
-			if(i==0)
-			{
-				//g2d.rotate(-Math.toRadians(45));
-			}
 			this.index++;
         }
 	}
 	
-	public void drawSubmarinos(Graphics2D g2d,double tam,Square weapons[][])
+	public void drawSubmarinos(Graphics2D g2d,double tam,Square weapons[][], boolean[] rotate)
 	{
 		int i;
 		Rectangle2D r1;
@@ -57,7 +49,7 @@ public class DrawWeaponsFrame {
         }
 	}
 	
-	public void drawDestroyers(Graphics2D g2d,double tam,Square weapons[][])
+	public void drawDestroyers(Graphics2D g2d,double tam,Square weapons[][], boolean[] rotate)
 	{
 		int i;
 		Rectangle2D r1;
@@ -76,7 +68,7 @@ public class DrawWeaponsFrame {
 		
 	}
 	
-	public void drawCruzadores(Graphics2D g2d,double tam,Square weapons[][])
+	public void drawCruzadores(Graphics2D g2d,double tam,Square weapons[][], boolean[] rotate)
 	{
 		int i;
 		Rectangle2D r1;
@@ -94,7 +86,7 @@ public class DrawWeaponsFrame {
         }
 	}
 	
-	public void drawCouracado(Graphics2D g2d,double tam,Square weapons[][])
+	public void drawCouracado(Graphics2D g2d,double tam,Square weapons[][], boolean[] rotate)
 	{
 		Rectangle2D r1;
 		

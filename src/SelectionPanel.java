@@ -2,23 +2,32 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
-public class SelectionPanel extends JPanel implements  MouseListener, MouseMotionListener {
+public class SelectionPanel extends JPanel implements  MouseListener, MouseMotionListener{
 	
+	private int count_rotations = 0;
 	private  final double dimensao = 15;
     private final double tamquadrado = 32;
     private boolean pressed = false;
 	private double mouseX;
 	private double mouseY;
 	private Square weapons[][] = new Square[15][6];
+	//Utilize este vetor de rotação quando alguma peça tiver sido clicada
+	private boolean rotate[] = new boolean[15];
 	private int actualWeapon = -1;
 	private DrawWeaponsFrame d = new DrawWeaponsFrame();
 	private double previousX,previousY;
@@ -44,6 +53,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         MainController main = MainController.getMainController();
         this.addMouseListener(this);
         this.addMouseMotionListener(this); 
+        this.setKeyBindings();
         Player p = main.getActualPlayer();
         Graphics2D g2d = (Graphics2D)g;
         for(i=0; i<5; i++)
@@ -109,15 +119,65 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     	}
     	
         g2d.drawString(p.getName()+",selecione uma arma na lista", 550, 635);
-        d.drawHidroPlanes(g2d, tamquadrado,weapons);
-        d.drawSubmarinos(g2d, tamquadrado,weapons);
-        d.drawDestroyers(g2d, tamquadrado, weapons);
-        d.drawCruzadores(g2d, tamquadrado, weapons);
-        d.drawCouracado(g2d, tamquadrado, weapons);
+        
+        d.drawHidroPlanes(g2d, tamquadrado,weapons, rotate);
+        d.drawSubmarinos(g2d, tamquadrado,weapons, rotate);
+        d.drawDestroyers(g2d, tamquadrado, weapons, rotate);
+        d.drawCruzadores(g2d, tamquadrado, weapons, rotate);
+        d.drawCouracado(g2d, tamquadrado, weapons, rotate);
         
         m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0,weapons,this.actualWeapon, this.registerWeapon);
   
     }
+    
+    //Funciona bem como um key listener, só que utiliza actions, meio q na gambiarra
+    private void setKeyBindings() {
+        ActionMap actionMap = getActionMap();
+        int condition = JComponent.WHEN_IN_FOCUSED_WINDOW;
+        InputMap inputMap = getInputMap(condition );
+
+        //Utilizaremos duas teclas, "R" para rotacionar e "Esc" para voltar atrás em uma adição de arma
+        String vkR = "VK_R";
+        String vkEsc = "VK_ESCAPE";
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), vkEsc);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, 0), vkR);
+
+        //Crio uma ação pra cada tecla
+        actionMap.put(vkR, new KeyAction(vkR));
+        actionMap.put(vkEsc, new KeyAction(vkEsc));
+
+    }
+    
+    //Classe criada pq o KeyListener nao funcionava de jeito algum
+    private class KeyAction extends AbstractAction {
+    	
+        public KeyAction(String actionCommand) {
+           putValue(ACTION_COMMAND_KEY, actionCommand);
+        }
+
+        public void actionPerformed(ActionEvent actionEvt) {
+           //Se eu estiver pressionando R
+           if(actionEvt.getActionCommand() == "VK_R")
+           {
+        	   //Se o numero de vezes q eu apertei R foi maior 3, quer dizer q eu voltei 
+        	   //pra estaca zero, ou seja, a peça não esta rotacionada, então o vetor de rotacao
+        	   //para a arma que esta sendo clicada vai voltar a ser falso
+        	   if(count_rotations > 3)
+        	   {
+        		   count_rotations = 0;
+        		   rotate[actualWeapon] = false;
+        	   }
+        	   //Se eu cliquei em alguma arma e apertei R, o vetor de rotacoes, na posição
+        	   //referente à arma que cliquei, vai receber true e o numero de rotacoes feitas
+        	   //é incrementado
+        	   if(actualWeapon != -1)
+        	   {
+        		   rotate[actualWeapon] = true;
+        		   count_rotations++;
+        	   }
+           }
+        }
+     }
     
     public boolean ArrayisEmpty(Square s[][], int tam)
     {
