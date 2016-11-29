@@ -5,6 +5,9 @@ import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
@@ -104,7 +107,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	    		aux_index = 0;
 	    	}
     	}
-
+    	
         g2d.drawString(p.getName()+",selecione uma arma na lista", 550, 635);
         d.drawHidroPlanes(g2d, tamquadrado,weapons);
         d.drawSubmarinos(g2d, tamquadrado,weapons);

@@ -17,7 +17,11 @@ public class DrawWeaponsFrame {
 		Rectangle2D r[] = new Rectangle2D[6];
 		
 		for(i=0;i<5;i++)
-        {	
+		{
+			if(i==0)
+			{
+				//g2d.rotate(Math.toRadians(45));
+			}
 			for(j=0;j<6;j++)
 			{
 				g2d.setPaint(weapons[this.index][j].getColor());
@@ -27,7 +31,10 @@ public class DrawWeaponsFrame {
 					g2d.fill(r[j]);
 				}
 			}
-			
+			if(i==0)
+			{
+				//g2d.rotate(-Math.toRadians(45));
+			}
 			this.index++;
         }
 	}
