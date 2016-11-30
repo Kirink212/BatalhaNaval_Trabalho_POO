@@ -40,6 +40,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	private boolean registerWeapon[] = new boolean [16];
 	private boolean comeback[] = new boolean[15];
 	private Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
+	private int num_click = 0;
 	
     public SelectionPanel() {
         
@@ -285,17 +286,33 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 			weapons[index][0].setCollided(true);
 			this.actualWeapon = index;
 		 }
-		 
-		 if(index != -1 && mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
- 		 {
- 			this.registerWeapon[index+1] = true;
- 			this.removeAll(); 
- 			this.repaint();
- 		 }
+		 switch(num_click)
+		 {
+		 	case 0:
+				 if(index != -1 && mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
+		 		 {
+		 			this.registerWeapon[index+1] = true;
+		 			num_click++;
+		 			this.removeAll(); 
+		 			this.repaint();
+		 		 }
+				 break;
+		 	case 1:	 
+		 		if(mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado) && this.registerWeapon[index+1] == true)
+		 		{
+					this.registerWeapon[index+1] = false;
+					weapons[index][0].setX(this.mouseX);
+					weapons[index][0].setY(this.mouseY);
+					weapons[index][0].setCollided(true);
+					this.actualWeapon = index;
+					num_click = 0;
+		 		}
+		 		break;
+		 }
 	}
 	public void mouseReleased(MouseEvent me)
 	{
-		 
+		
 	}
 
 	public void mouseDragged(MouseEvent me) {
@@ -359,12 +376,11 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 
 		 if(this.registerWeapon[this.actualWeapon+1])
 		 {
-			 weapons[this.actualWeapon][0].setX(-1);
-			 weapons[this.actualWeapon][0].setY(-1);
-			 weapons[this.actualWeapon][0].setWidth(0);
-			 weapons[this.actualWeapon][0].setHeight(0);
-			 weapons[this.actualWeapon][0].setCollided(false);
+			 //weapons[this.actualWeapon][0].setX(-1);
 			 //weapons[this.actualWeapon][0].setY(-1);
+			 //weapons[this.actualWeapon][0].setWidth(0);
+			 //weapons[this.actualWeapon][0].setHeight(0);
+			 weapons[this.actualWeapon][0].setCollided(false);
 			 this.actualWeapon = -1;
 		 }
 		 
