@@ -41,11 +41,12 @@ public class SelectionJanela extends Janela implements ActionListener{
 		MainController mainC = MainController.getMainController();
 		mainC.createPlayers(this.t);
 		this.j.setVisible(false);
-		this.setVisible(true);
 		this.setResizable(false);
 		this.setSize(LARG_DEFAULT, ALT_DEFAULT);
 		this.setTitle("Batalha Naval");
+		//this.pack();
 		this.getContentPane().add(p);
+		this.setVisible(true);
 	}
 
 }
