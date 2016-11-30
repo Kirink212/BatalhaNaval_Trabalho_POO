@@ -37,6 +37,11 @@ public class MainController {
 		return this.p[this.actualPlayer];
 	}
 	
+	public int getActualPlayerIndex()
+	{
+		return this.actualPlayer;
+	}
+	
 	public int changeActualPlayer()
 	{
 		return this.actualPlayer++;
