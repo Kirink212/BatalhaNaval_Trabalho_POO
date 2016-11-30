@@ -40,7 +40,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	private boolean registerWeapon[] = new boolean [16];
 	private boolean comeback[] = new boolean[15];
 	private Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
-	private int num_click = 0;
+	private int num_click[] = new int[15];
 	
     public SelectionPanel() {
         
@@ -286,13 +286,13 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 			weapons[index][0].setCollided(true);
 			this.actualWeapon = index;
 		 }
-		 switch(num_click)
+		 switch(num_click[index])
 		 {
 		 	case 0:
 				 if(index != -1 && mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
 		 		 {
 		 			this.registerWeapon[index+1] = true;
-		 			num_click++;
+		 			num_click[index]++;
 		 			this.removeAll(); 
 		 			this.repaint();
 		 		 }
@@ -301,11 +301,32 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 		if(mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado) && this.registerWeapon[index+1] == true)
 		 		{
 					this.registerWeapon[index+1] = false;
-					weapons[index][0].setX(this.mouseX);
-					weapons[index][0].setY(this.mouseY);
-					weapons[index][0].setCollided(true);
-					this.actualWeapon = index;
-					num_click = 0;
+					num_click[index] = 0;
+					if(index >=0 && index <= 4)
+					{
+						 for(j=0; j<6; j++)
+						 {
+							if(j < 3)
+							{
+								weapons[index][j].setX(this.mouseX+j*this.tamquadrado);
+								weapons[index][j].setY(this.mouseY);
+							}
+							else
+							{
+								weapons[index][j].setX(this.mouseX+(j-3)*this.tamquadrado);
+								weapons[index][j].setY(this.mouseY+this.tamquadrado);
+							}
+							weapons[index][j].setCollided(true);
+							this.actualWeapon = index;
+						 }
+					}
+					else if(index != -1)
+					{
+						weapons[index][0].setX(this.mouseX);
+						weapons[index][0].setY(this.mouseY);
+						weapons[index][0].setCollided(true);
+						this.actualWeapon = index;
+					}
 		 		}
 		 		break;
 		 }
