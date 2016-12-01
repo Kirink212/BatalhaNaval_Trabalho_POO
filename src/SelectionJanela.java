@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JTextField;
 
 public class SelectionJanela extends Janela implements ActionListener{
@@ -19,6 +20,7 @@ public class SelectionJanela extends Janela implements ActionListener{
 	private int sa = screenSize.height;
 	private int x = sl / 2 - LARG_DEFAULT / 2;
 	private int y = sa / 2 - ALT_DEFAULT / 2;
+	private MainController mainC = MainController.getMainController();
 	
 	public SelectionJanela(Janela j, JTextField[] t)
 	{
@@ -34,18 +36,34 @@ public class SelectionJanela extends Janela implements ActionListener{
 		int sa = screenSize.height;
 		int x = sl / 2 - LARG_DEFAULT / 2;
 		int y = sa / 2 - ALT_DEFAULT / 2;
+		JButton b1 = new JButton("Confirmar/Próximo");
+		JButton b2 = new JButton("Confirmar e Batalhar");
 		
 		this.setBounds(x, y, LARG_DEFAULT, ALT_DEFAULT);
 		
 		SelectionPanel p = new SelectionPanel();
-		MainController mainC = MainController.getMainController();
 		mainC.createPlayers(this.t);
 		this.j.setVisible(false);
 		this.setResizable(false);
 		this.setSize(LARG_DEFAULT, ALT_DEFAULT);
-		this.setTitle("Batalha Naval");
-		//this.pack();
+		this.setTitle("Posicionamento das Armas");
 		this.getContentPane().add(p);
+		
+		if(mainC.getActualPlayerIndex() == 0)
+		{
+			b1.setBounds(640, 670, 100, 50);
+			p.add(b1);
+			b1.addActionListener(new SelectionJanela(this, this.t));
+		}
+		else
+		{
+			b2.setBounds(640, 670, 100, 50);
+			p.add(b2);
+			b2.addActionListener(new SelectionJanela(this, this.t));
+		}
+		
+		p.setLayout(null);
+		
 		this.setVisible(true);
 	}
 

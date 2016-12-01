@@ -142,7 +142,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         d.drawCruzadores(g2d, tamquadrado, weapons, rotate,count_rotations,comeback);
         d.drawCouracado(g2d, tamquadrado, weapons, rotate,count_rotations,comeback);
         
-        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0,weapons,this.actualWeapon, this.registerWeapon,count_rotations);
+        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0,weapons,this.actualWeapon, this.registerWeapon, count_rotations);
   
     }
     
@@ -286,49 +286,53 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 			weapons[index][0].setCollided(true);
 			this.actualWeapon = index;
 		 }
-		 switch(num_click[index])
+		 
+		 if(index != -1)
 		 {
-		 	case 0:
-				 if(index != -1 && mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
-		 		 {
-		 			this.registerWeapon[index+1] = true;
-		 			num_click[index]++;
-		 			this.removeAll(); 
-		 			this.repaint();
-		 		 }
-				 break;
-		 	case 1:	 
-		 		if(mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado) && this.registerWeapon[index+1] == true)
-		 		{
-					this.registerWeapon[index+1] = false;
-					num_click[index] = 0;
-					if(index >=0 && index <= 4)
-					{
-						 for(j=0; j<6; j++)
-						 {
-							if(j < 3)
-							{
-								weapons[index][j].setX(this.mouseX+j*this.tamquadrado);
-								weapons[index][j].setY(this.mouseY);
-							}
-							else
-							{
-								weapons[index][j].setX(this.mouseX+(j-3)*this.tamquadrado);
-								weapons[index][j].setY(this.mouseY+this.tamquadrado);
-							}
-							weapons[index][j].setCollided(true);
+			 switch(num_click[index])
+			 {
+			 	case 0:
+					 if(index != -1 && mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
+			 		 {
+			 			this.registerWeapon[index+1] = true;
+			 			num_click[index]++;
+			 			this.removeAll(); 
+			 			this.repaint();
+			 		 }
+					 break;
+			 	case 1:	 
+			 		if(mouseCollided( this.mouseX, this.mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado) && this.registerWeapon[index+1] == true)
+			 		{
+						this.registerWeapon[index+1] = false;
+						num_click[index] = 0;
+						if(index >=0 && index <= 4)
+						{
+							 for(j=0; j<6; j++)
+							 {
+								if(j < 3)
+								{
+									weapons[index][j].setX(this.mouseX+j*this.tamquadrado);
+									weapons[index][j].setY(this.mouseY);
+								}
+								else
+								{
+									weapons[index][j].setX(this.mouseX+(j-3)*this.tamquadrado);
+									weapons[index][j].setY(this.mouseY+this.tamquadrado);
+								}
+								weapons[index][j].setCollided(true);
+								this.actualWeapon = index;
+							 }
+						}
+						else if(index != -1)
+						{
+							weapons[index][0].setX(this.mouseX);
+							weapons[index][0].setY(this.mouseY);
+							weapons[index][0].setCollided(true);
 							this.actualWeapon = index;
-						 }
-					}
-					else if(index != -1)
-					{
-						weapons[index][0].setX(this.mouseX);
-						weapons[index][0].setY(this.mouseY);
-						weapons[index][0].setCollided(true);
-						this.actualWeapon = index;
-					}
-		 		}
-		 		break;
+						}
+			 		}
+			 		break;
+			 }
 		 }
 	}
 	public void mouseReleased(MouseEvent me)

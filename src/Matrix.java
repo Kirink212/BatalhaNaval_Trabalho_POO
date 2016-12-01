@@ -123,13 +123,20 @@ public class Matrix{
 								r2[k] = new Rectangle2D.Double( q[i][j].getX(), q[i][j].getY(), q[i][j].getWidth(), q[i][j].getHeight());
 								g2d.fill(r2[k]);
 							}
+							
 							if(registerWeapon[index+1])
 							{
 								q[i][j].setColor(weapons[index][k].getColor());
 								q[i][j].setTipo(weapons[index][0].getTipo());
 							}
+							else
+							{
+								q[i][j].setColor(Color.WHITE);
+								q[i][j].setTipo(-1);
+							}
 						}
 					}
+					
 				}
 				else if(index!=-1)
 				{
@@ -179,6 +186,11 @@ public class Matrix{
 						{
 							q[i][j].setColor(weapons[index][0].getColor());
 							q[i][j].setTipo(weapons[index][0].getTipo());
+						}
+						else
+						{
+							q[i][j].setColor(Color.WHITE);
+							q[i][j].setTipo(-1);
 						}
 					}
 				}
