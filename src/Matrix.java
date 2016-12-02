@@ -5,12 +5,13 @@ public class Matrix{
 	
 	private double width;
 	private double height;
-	private double offset_x;
-	private double offset_y;
 	private double tileSize;
 	private double rx_offset;
 	private double ry_offset;
+	private double offset_kx[] = new double[6];
+	private double offset_ky[] = new double[6];
 	private Square q[][] = new Square[15][15];
+	private Utilities u = Utilities.getUtilities();
 	
 	public Matrix(double n1, double n2, double tile)
 	{
@@ -27,10 +28,8 @@ public class Matrix{
 		g2d.setPaint(Color.BLACK);
 		Rectangle2D r1;
 		Rectangle2D r2[] = new Rectangle2D[6];
-		this.offset_x = offset_x;
-		this.offset_y = offset_y;
 		
-		if(MatrixIsEmpty(q, 15, 15))
+		if(u.MatrixIsEmpty(q, 15, 15))
 		{
 			for(i=0; i< this.width; i++)
 			{
@@ -78,6 +77,11 @@ public class Matrix{
 						case 0:
 							rx_offset = 0;
 							ry_offset = 0;
+							for(int t=0; t<6; t++)
+							{
+								offset_kx[t] = 0;
+								offset_ky[t] = 0;
+							}
 							break;
 						case 1:
 							rx_offset = -weapons[index][1].getHeight();
@@ -85,10 +89,40 @@ public class Matrix{
 							segura = auxWidth;
 							auxWidth = auxHeight;
 							auxHeight = segura;
+							for(int t=0; t<6; t++)
+							{
+								double w = weapons[index][t].getWidth();
+								double h = weapons[index][t].getHeight();
+								if(t < 3)
+								{
+									offset_kx[t] = -w*(t+1);
+									offset_ky[t] = t*h;
+								}
+								else
+								{
+									offset_kx[t] = -w*(t-1);
+									offset_ky[t] = (-(t-3) + 1)*h;
+								}
+							}
 							break;
 						case 2:
 							rx_offset = -weapons[index][1].getWidth();
 							ry_offset =-weapons[index][1].getHeight();
+							for(int t=0; t<6; t++)
+							{
+								double w = weapons[index][t].getWidth();
+								double h = weapons[index][t].getHeight();
+								if(t < 3)
+								{
+									offset_kx[t] = -w*(2*t-1);
+									offset_ky[t] = -h;
+								}
+								else
+								{
+									offset_kx[t] = -w*(2*(t-3)-1);
+									offset_ky[t] = -3*h;
+								}
+							}
 							break;
 						case 3:
 							rx_offset = 0;
@@ -96,43 +130,55 @@ public class Matrix{
 							segura = auxWidth;
 							auxWidth = auxHeight;
 							auxHeight = segura;
+							for(int t=0; t<6; t++)
+							{
+								double w = weapons[index][t].getWidth();
+								double h = weapons[index][t].getHeight();
+								if(t < 3)
+								{
+									offset_kx[t] = -w*t;
+									offset_ky[t] = -h*(t+1);
+								}
+								else
+								{
+									offset_kx[t] = (-(t-3) +1)*w;;
+									offset_ky[t] = -h*(t-1);
+								}
+							}
 							break;
-							
 						default :
 							rx_offset = 0;
 							ry_offset = 0;
-							
+							for(int t=0; t<6; t++)
+							{
+								offset_kx[t] = 0;
+								offset_ky[t] = 0;
+							}
 						
 					}
 					
-					
-					if(this.weaponCollided(mouse_x+rx_offset, mouse_y+ry_offset,auxWidth
-										   , auxHeight, q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
+					for(k=0;k<6;k++)
 					{
-						for(k=0;k<6;k++)
+						if(u.weaponCollided(mouse_x+rx_offset, mouse_y+ry_offset,auxWidth
+										   , auxHeight, q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
 						{
-							if(k%2 != 0)
+							if(u.weaponCollided(weapons[index][k].getX()+offset_kx[k], weapons[index][k].getY()+offset_ky[k], weapons[index][k].getWidth()
+									   , weapons[index][k].getWidth(), q[i][j].getX(), q[i][j].getY(), this.tileSize, this.tileSize))
 							{
 								g2d.setPaint(weapons[index][k].getColor());
 								r2[k] = new Rectangle2D.Double( q[i][j].getX(), q[i][j].getY(), q[i][j].getWidth(), q[i][j].getHeight());
 								g2d.fill(r2[k]);
-							}
-							else
-							{
-								g2d.setPaint(weapons[index][k].getColor());
-								r2[k] = new Rectangle2D.Double( q[i][j].getX(), q[i][j].getY(), q[i][j].getWidth(), q[i][j].getHeight());
-								g2d.fill(r2[k]);
-							}
 							
-							if(registerWeapon[index+1])
-							{
-								q[i][j].setColor(weapons[index][k].getColor());
-								q[i][j].setTipo(weapons[index][0].getTipo());
-							}
-							else
-							{
-								q[i][j].setColor(Color.WHITE);
-								q[i][j].setTipo(-1);
+								if(registerWeapon[index+1])
+								{
+									q[i][j].setColor(weapons[index][k].getColor());
+									q[i][j].setTipo(weapons[index][0].getTipo());
+								}
+								else
+								{
+									q[i][j].setColor(Color.WHITE);
+									q[i][j].setTipo(-1);
+								}
 							}
 						}
 					}
@@ -177,7 +223,7 @@ public class Matrix{
 							
 						
 					}
-					if(this.weaponCollided(mouse_x+rx_offset, mouse_y+ry_offset, auxWidth,
+					if(u.weaponCollided(mouse_x+rx_offset, mouse_y+ry_offset, auxWidth,
 										   auxHeight, q[i][j].getX(), q[i][j].getY(), q[i][j].getWidth(), q[i][j].getHeight()))
 					{
 						g2d.setPaint(weapons[index][0].getColor());
@@ -200,37 +246,4 @@ public class Matrix{
 		}
 		
 	}
-
-	
-	public boolean weaponCollided( double mouse_x, double mouse_y, double weapon_w, double weapon_h, double x, double y, double w, double h) 
-	{
-			return (
-						x + (w / 2) >= mouse_x &&
-						x + (w / 2) < mouse_x + weapon_w && 
-						
-						y + (h / 2) >= mouse_y &&
-						y + (h / 2) < mouse_y + weapon_h  
-						
-					);
-	}
-	
-	public boolean mouseCollided( double mouse_x, double mouse_y, double x, double y, double w, double h) 
-	{
-		return (mouse_x <= x+w && mouse_y <= y+h && y <= mouse_y+1 && x <= mouse_x+1);
-	}
-
-	public boolean MatrixIsEmpty(Square s[][], int m, int n)
-    {
-    	for(int i=0; i<m; i++)
-    	{
-    		for(int j=0; j<n; j++)
-        	{
-	    		if(s[i][j] != null)
-	    		{
-	    			return false;
-	    		}
-        	}
-    	}
-    	return true;
-    }
 }

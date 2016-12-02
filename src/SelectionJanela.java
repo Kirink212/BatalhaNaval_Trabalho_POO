@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.peer.ComponentPeer;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -30,37 +31,28 @@ public class SelectionJanela extends Janela implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e) 
 	{
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Dimension screenSize = tk.getScreenSize();
-		int sl = screenSize.width;
-		int sa = screenSize.height;
-		int x = sl / 2 - LARG_DEFAULT / 2;
-		int y = sa / 2 - ALT_DEFAULT / 2;
 		JButton b1 = new JButton("Confirmar/Próximo");
 		JButton b2 = new JButton("Confirmar e Batalhar");
-		
 		this.setBounds(x, y, LARG_DEFAULT, ALT_DEFAULT);
-		
+		b1.setBounds(640, 670, 100, 50);
+		b2.setBounds(640, 670, 100, 50);
 		SelectionPanel p = new SelectionPanel();
 		mainC.createPlayers(this.t);
 		this.j.setVisible(false);
 		this.setResizable(false);
 		this.setSize(LARG_DEFAULT, ALT_DEFAULT);
 		this.setTitle("Posicionamento das Armas");
-		this.getContentPane().add(p);
-		
 		if(mainC.getActualPlayerIndex() == 0)
 		{
-			b1.setBounds(640, 670, 100, 50);
 			p.add(b1);
 			b1.addActionListener(new SelectionJanela(this, this.t));
 		}
 		else
 		{
-			b2.setBounds(640, 670, 100, 50);
 			p.add(b2);
 			b2.addActionListener(new SelectionJanela(this, this.t));
 		}
+		this.getContentPane().add(p);
 		
 		p.setLayout(null);
 		
