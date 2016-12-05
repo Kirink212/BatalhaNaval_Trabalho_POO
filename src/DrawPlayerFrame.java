@@ -52,7 +52,7 @@ public class DrawPlayerFrame {
 			mainC.addPlayer();
 		}
 		
-		Inicia.addActionListener(new SelectionJanela((Janela)ref, j));
+		Inicia.addActionListener(new SelectionJanela((Janela)ref, j, -1));
 		
 		
 		ref.setTitle("Jogadores");
