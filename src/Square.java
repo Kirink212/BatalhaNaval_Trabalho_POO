@@ -3,15 +3,15 @@ import java.awt.Color;
 public class Square {
 	private double x = -1;
 	private double y = -1;
-	private double i = -1;
-	private double j = -1;
+	private int i = -1;
+	private int j = -1;
 	private double w = -1;
 	private double h = -1;
 	private boolean collided = false;
 	private int tipo;
 	private Color cor;
 	
-	public Square(double x, double y, double w, double h, double i, double j, boolean col, int tipo, Color cor)
+	public Square(double x, double y, double w, double h, int i, int j, boolean col, int tipo, Color cor)
 	{
 		this.collided = col;
 		this.x = x;
@@ -59,6 +59,16 @@ public class Square {
 		return this.cor;
 	}
 	
+	public int getLine()
+	{
+		return this.i;
+	}
+	
+	public int getColumn()
+	{
+		return this.j;
+	}
+	
 	public void setX(double x)
 	{
 		this.x = x;
@@ -94,6 +104,16 @@ public class Square {
 		this.cor = c;
 	}
 
+	public void setLine(int i)
+	{
+		this.i = i;
+	}
+	
+	public void setColumn(int j)
+	{
+		this.j = j;
+	}
+	
 	public boolean isEmpty() {
 		if(this.getX() == -1 && this.getY() == -1)
 		{

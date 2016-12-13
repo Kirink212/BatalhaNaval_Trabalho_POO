@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -13,11 +14,12 @@ import javax.swing.SwingUtilities;
 
 public class LoadLogicController {
 	
-	private Color transparente = new Color(255,255,255,0);
+	private Color transparente = new Color(0,0,0,0);
 	private double previousX[] = new double[15];
 	private double previousY[] = new double[15];
 	private int countRotations[] =new int[15];
-	private static Square weapons[][] = new Square[15][6];
+	private Square weapons[][] = new Square[15][6];
+	private Square weapons_repos[][] = new Square[15][6];
 	private boolean rotate[] = new boolean[15];
 	private int qtdTipo[] = new int[5];
 	private Color colorTipo[] = new Color[5];
@@ -72,12 +74,12 @@ public class LoadLogicController {
 	    					if(j < 3)
 	    					{
 	    						weapons[index][j] = (j%2 != 0)? new Square(30+j*tamquadrado, 115, tamquadrado, tamquadrado, -1, -1, false, i, colorTipo[i]) 
-	    								: new Square(30+j*tamquadrado, 115, tamquadrado, tamquadrado, -1, -1, false, i, transparente);
+	    								: new Square(30+j*tamquadrado, 115, tamquadrado, tamquadrado, -1, -1, false, -2, transparente);
 	    					}
 	    					else
 	    					{
 	    						weapons[index][j] = (j%2 != 0)? new Square(30+(j-3)*tamquadrado, 115+tamquadrado, tamquadrado, tamquadrado, -1, -1, false, i, colorTipo[i])
-	    								: new Square(30+(j-3)*tamquadrado, 115+tamquadrado, tamquadrado, tamquadrado, -1, -1, false, i, transparente);
+	    								: new Square(30+(j-3)*tamquadrado, 115+tamquadrado, tamquadrado, tamquadrado, -1, -1, false, -2, transparente);
 	    					}
 	    				}
 	    			}
@@ -123,9 +125,9 @@ public class LoadLogicController {
 		}
 	}
 	
-	public void mousePressedLogic(JPanel p, MouseEvent me, double mouseX, double mouseY, double tamquadrado, Utilities u)
+	public void mousePressedLogic(JPanel p, MouseEvent me, Player play, double mouseX, double mouseY, double tamquadrado, Utilities u)
 	{
-		int index, j;
+		int index, j, count_intocaveis = 0;
 		index = u.findWeapon(weapons, 15, mouseY, mouseX);
 		if(index != -1)
 		{
@@ -157,13 +159,29 @@ public class LoadLogicController {
 					actualWeapon = index;
 				 }
 				 
-				 if(u.mouseCollided( mouseX, mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
-		 		 {
-		 			registerWeapons[index+1] = true;
-		 			num_click[index]++;
-		 			p.removeAll(); 
-		 			p.repaint();
-		 		 }
+				 for(int i=0; i<15; i++)
+				 {
+					 for(int k=0; k<15; k++)
+					 {
+						 if(u.weaponCollided(mouseX, mouseY, weapons[index][0].getWidth(), weapons[index][0].getHeight(), play.getMatrix()[i][k].getX(), play.getMatrix()[i][k].getY(), play.getMatrix()[i][k].getWidth(), play.getMatrix()[i][k].getHeight()))
+						 {
+							 if(u.mouseCollided( mouseX, mouseY, 700.0, 80.0, 15*tamquadrado, 15*tamquadrado))
+					 		 {
+								if(play.getMatrix()[i][k].getTipo() == -3)
+								{
+									count_intocaveis++;
+								}
+								if(count_intocaveis == 0)
+								{
+									System.out.println(play.getMatrix()[i][k].getTipo());
+									registerWeapons[index+1] = true;
+									p.removeAll();
+									p.repaint();
+								}
+					 		 }
+						 }
+					 }
+				 }
 			 }
 					  
 			 if(SwingUtilities.isRightMouseButton(me) && registerWeapons[index+1] == true)
@@ -202,7 +220,7 @@ public class LoadLogicController {
 		}
 	}
 	
-	public void mouseMovedLogic(JPanel p, MouseEvent me, double mouseX, double mouseY, double tamquadrado)
+	public void mouseMovedLogic(JPanel p, MouseEvent me, Player play, double mouseX, double mouseY, double tamquadrado)
 	{
 		int j;
 		if(actualWeapon >=0 && actualWeapon <= 4)
@@ -237,6 +255,7 @@ public class LoadLogicController {
 						 weapons[actualWeapon][j].setCollided(false);
 					 }
 				 }
+				 
 			 }
 			 if(comeback[actualWeapon] == true)
 			 {
@@ -272,6 +291,19 @@ public class LoadLogicController {
 		 
 		 if(this.registerWeapons[actualWeapon+1])
 		 {
+			 if(actualWeapon >=0 && actualWeapon <= 4)
+			 {
+				 for(j=0; j<6; j++)
+				 {
+					 weapons[actualWeapon][j].setX(play.getMatrix()[weapons[actualWeapon][j].getLine()][weapons[actualWeapon][j].getColumn()].getX());
+					 weapons[actualWeapon][j].setY(play.getMatrix()[weapons[actualWeapon][j].getLine()][weapons[actualWeapon][j].getColumn()].getY());
+				 }
+			 }
+			 else if(actualWeapon != -1)
+			 {
+				 weapons[actualWeapon][0].setX(play.getMatrix()[weapons[actualWeapon][0].getLine()][weapons[actualWeapon][0].getColumn()-weapons[actualWeapon][0].getTipo()].getX());
+				 weapons[actualWeapon][0].setY(play.getMatrix()[weapons[actualWeapon][0].getLine()][weapons[actualWeapon][0].getColumn()-weapons[actualWeapon][0].getTipo()].getY());
+			 }
 			 weapons[actualWeapon][0].setCollided(false);
 			 actualWeapon = -1;
 		 }
@@ -280,11 +312,11 @@ public class LoadLogicController {
 		 p.repaint();
 	}
 	
-	public void loadMatrixLogic(Graphics2D g2d, Utilities u, Square[][] q, int i, int j, double mouse_x, double mouse_y, Rectangle2D r1, double tileSize)
+	public void loadMatrixLogic(Graphics2D g2d, JPanel p, Utilities u, Square[][] q, int i, int j, double mouse_x, double mouse_y, Rectangle2D r1, double tileSize)
 	{
 		int k;
 		Rectangle2D r2[] = new Rectangle2D[6];
-		
+		int count = 0;
 		if(actualWeapon >=0 && actualWeapon <= 4)
 		{
 			double segura,auxWidth,auxHeight;
@@ -389,18 +421,78 @@ public class LoadLogicController {
 						g2d.setPaint(weapons[actualWeapon][k].getColor());
 						r2[k] = new Rectangle2D.Double( q[i][j].getX(), q[i][j].getY(), q[i][j].getWidth(), q[i][j].getHeight());
 						g2d.fill(r2[k]);
-					
+						
 						if(registerWeapons[actualWeapon+1])
 						{
-							q[i][j].setColor(weapons[actualWeapon][k].getColor());
-							q[i][j].setTipo(weapons[actualWeapon][0].getTipo());
-						}
-						else
-						{
-							q[i][j].setColor(Color.WHITE);
-							q[i][j].setTipo(-1);
+							if(i-1 >= 0)
+							{
+								if(j-1 >= 0)
+								{
+									if(q[i-1][j-1].getTipo() == -1)
+									{
+										q[i-1][j-1].setTipo(-3);
+									}
+								}
+								if(q[i-1][j].getTipo() == -1)
+								{
+									q[i-1][j].setTipo(-3);
+								}
+								if(j+1 <= 14)
+								{
+									if(q[i-1][j+1].getTipo() == -1)
+									{
+										q[i-1][j+1].setTipo(-3);
+									}
+								}
+							}
+							if(i+1 <= 14)
+							{
+								if(j-1 >= 0)
+								{
+									if(q[i+1][j-1].getTipo() == -1)
+									{
+										q[i+1][j-1].setTipo(-3);
+									}
+								}
+								if(q[i+1][j].getTipo() >= -2)
+								{
+									q[i+1][j].setTipo(-3);
+								}
+								if(j+1 <= 14)
+								{
+									if(q[i+1][j+1].getTipo() == -1)
+									{
+										q[i+1][j+1].setTipo(-3);
+									}
+								}
+							}
+							if(j-1 >= 0)
+							{
+								if(q[i][j-1].getTipo() == -1)
+								{
+									q[i][j-1].setTipo(-3);
+								}
+							}
+							if(j+1 <= 14)
+							{
+								if(q[i][j+1].getTipo() == -1)
+								{
+									q[i][j+1].setTipo(-3);
+								}
+							}
+							q[i][j].setColor((k%2 != 0)? weapons[actualWeapon][k].getColor() : Color.WHITE);
+							q[i][j].setTipo(weapons[actualWeapon][k].getTipo());
+							weapons[actualWeapon][k].setLine(i);
+							weapons[actualWeapon][k].setColumn(j);
+							p.removeAll();
+							p.repaint();
 						}
 					}
+				}
+				if(registerWeapons[actualWeapon+1] == false && weapons[actualWeapon][0].getColumn() != -1 && weapons[actualWeapon][0].getLine() != -1)
+				{
+					q[weapons[actualWeapon][k].getLine()][weapons[actualWeapon][k].getColumn()].setColor(Color.WHITE);
+					q[weapons[actualWeapon][k].getLine()][weapons[actualWeapon][k].getColumn()].setTipo(-1);
 				}
 			}
 			
@@ -451,13 +543,103 @@ public class LoadLogicController {
 				g2d.fill(r1);
 				if(registerWeapons[actualWeapon+1])
 				{
+					if(i-1 >= 0)
+					{
+						if(j-1 >= 0)
+						{
+							if(q[i-1][j-1].getTipo() == -1)
+							{
+								q[i-1][j-1].setTipo(-3);
+							}
+						}
+						if(q[i-1][j].getTipo() == -1)
+						{
+							q[i-1][j].setTipo(-3);
+						}
+						if(j+1 <= 14)
+						{
+							if(q[i-1][j+1].getTipo() == -1)
+							{
+								q[i-1][j+1].setTipo(-3);
+							}
+						}
+					}
+					if(i+1 <= 14)
+					{
+						if(j-1 >= 0)
+						{
+							if(q[i+1][j-1].getTipo() == -1)
+							{
+								q[i+1][j-1].setTipo(-3);
+							}
+						}
+						if(q[i+1][j].getTipo() >= -2)
+						{
+							q[i+1][j].setTipo(-3);
+						}
+						if(j+1 <= 14)
+						{
+							if(q[i+1][j+1].getTipo() == -1)
+							{
+								q[i+1][j+1].setTipo(-3);
+							}
+						}
+					}
+					if(j-1 >= 0)
+					{
+						if(q[i][j-1].getTipo() == -1)
+						{
+							q[i][j-1].setTipo(-3);
+						}
+					}
+					if(j+1 <= 14)
+					{
+						if(q[i][j+1].getTipo() == -1)
+						{
+							q[i][j+1].setTipo(-3);
+						}
+					}
+					weapons[actualWeapon][0].setLine(i);
+					weapons[actualWeapon][0].setColumn(j);
 					q[i][j].setColor(weapons[actualWeapon][0].getColor());
 					q[i][j].setTipo(weapons[actualWeapon][0].getTipo());
 				}
+			}
+			if(registerWeapons[actualWeapon+1] == false && weapons[actualWeapon][0].getColumn() != -1 && weapons[actualWeapon][0].getLine() != -1)
+			{
+				if(weapons[actualWeapon][0].getTipo() < 4)
+				{
+					while(count < weapons[actualWeapon][0].getTipo())
+					{
+						if(countRotations[actualWeapon]%2 == 0)
+						{
+							q[weapons[actualWeapon][0].getLine()][weapons[actualWeapon][0].getColumn() - count].setColor(Color.WHITE);
+							q[weapons[actualWeapon][0].getLine()][weapons[actualWeapon][0].getColumn() - count].setTipo(-1);
+						}
+						else
+						{
+							q[weapons[actualWeapon][0].getLine() - count][weapons[actualWeapon][0].getColumn()].setColor(Color.WHITE);
+							q[weapons[actualWeapon][0].getLine() - count][weapons[actualWeapon][0].getColumn()].setTipo(-1);
+						}
+						count++;
+					}
+				}
 				else
 				{
-					q[i][j].setColor(Color.WHITE);
-					q[i][j].setTipo(-1);
+					while(count < weapons[actualWeapon][0].getTipo()+1)
+					{
+						if(countRotations[actualWeapon]%2 == 0)
+						{
+							q[weapons[actualWeapon][0].getLine()][weapons[actualWeapon][0].getColumn() - count].setColor(Color.WHITE);
+							q[weapons[actualWeapon][0].getLine()][weapons[actualWeapon][0].getColumn() - count].setTipo(-1);
+						}
+						else
+						{
+							q[weapons[actualWeapon][0].getLine() - count][weapons[actualWeapon][0].getColumn()].setColor(Color.WHITE);
+							q[weapons[actualWeapon][0].getLine() - count][weapons[actualWeapon][0].getColumn()].setTipo(-1);
+						}
+						count++;
+					}
 				}
 			}
 		}
@@ -471,15 +653,6 @@ public class LoadLogicController {
 	public void hidroPlanesLogic(Graphics2D g2d, Rectangle2D[] r, int index)
 	{
 		int j;
-		for(int i=0; i<15; i++)
-		{
-			System.out.println(weapons[i][0].getX());
-			System.out.println(weapons[i][0].getY());
-			System.out.println(weapons[i][0].getWidth());
-			System.out.println(weapons[i][0].getHeight());
-			System.out.println(weapons[i][0].getCollided());
-			System.out.println(weapons[i][0].getColor());
-		}
 
 		if(rotate[index] == true)
 		{	
@@ -598,6 +771,12 @@ public class LoadLogicController {
 			}
 		}
 	}
+	
+	/*public void batalhaLogic(Graphics2D g2d,Rectangle2D r1,Square a[][],int index,Utilities u)
+	{
+		
+	}*/
+	
 	
 	/*
 	 * Esta parte referencia todas as funções acionadas

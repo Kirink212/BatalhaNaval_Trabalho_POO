@@ -65,6 +65,11 @@ public class Utilities {
 					);
 	}
 
+    public boolean weaponCollidedMatrix( double mouse_x, double mouse_y, double weapon_w, double weapon_h, double x, double y, double w, double h)
+    {
+    	return (mouse_x < x+w && mouse_y < y+h && y < mouse_y+weapon_h && x < mouse_x+weapon_w);
+    }
+    
 	public boolean MatrixIsEmpty(Square s[][], int m, int n)
     {
     	for(int i=0; i<m; i++)

@@ -26,14 +26,14 @@ public class BattleJanela extends Janela implements ActionListener {
 	public void actionPerformed(ActionEvent e) 
 	{
 		this.setBounds(x, y, LARG_DEFAULT, ALT_DEFAULT);
-		//SelectionPanel p = new SelectionPanel(this, this.t);
+		BattlePanel p = new BattlePanel();
 		this.j.setVisible(false);
 		this.setResizable(false);
 		this.setSize(LARG_DEFAULT, ALT_DEFAULT);
 		this.setTitle("Jantar a luz de velas");
-		//this.getContentPane().add(p);
+		this.getContentPane().add(p);
 		
-		//p.setLayout(null);
+		p.setLayout(null);
 		
 		this.setVisible(true);
 	}

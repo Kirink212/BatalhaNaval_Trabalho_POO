@@ -4,7 +4,7 @@ public class MainController {
 	private int NUMTOTAL = 0;
 	private static int actualPlayer = 0;
 	private static MainController m = null;
-	private Player p[] = new Player[2];
+	private static Player p[] = new Player[2];
 	public static Square matrix[][] = new Square[15][15];
 	
 	public MainController()
@@ -44,7 +44,14 @@ public class MainController {
 	
 	public void changeActualPlayer()
 	{
-		MainController.actualPlayer++;
+		if(MainController.actualPlayer ==1)
+		{
+			this.resetActualPlayer();
+		}
+		else
+		{
+			MainController.actualPlayer++;
+		}
 	}
 	
 	public void resetActualPlayer()
@@ -60,5 +67,10 @@ public class MainController {
 	public void addPlayer()
 	{
 		this.NUMTOTAL++;
+	}
+	
+	public Player[] getPlayerVector()
+	{
+		return p;
 	}
 }

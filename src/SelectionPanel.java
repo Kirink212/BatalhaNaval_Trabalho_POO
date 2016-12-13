@@ -35,7 +35,8 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 	private Matrix m = new Matrix(dimensao,dimensao, tamquadrado);
 	private Utilities u = Utilities.getUtilities();
 	LoadLogicController l = new LoadLogicController();
-	
+	MainController main = MainController.getMainController();
+	private Player p;
     public SelectionPanel(Janela j1, JTextField[] j) {
         this.janelaAtual = j1;
         this.jtext = j;
@@ -44,13 +45,12 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
     public void paintComponent(Graphics g)
     {
     	super.paintComponent(g);
-        MainController main = MainController.getMainController();
         JButton b1 = new JButton("Confirmar/Próximo");
 		JButton b2 = new JButton("Confirmar e Batalhar");
         this.addMouseListener(this);
         this.addMouseMotionListener(this); 
         l.setKeyBindings(this, l);
-        Player p = main.getActualPlayer();
+        p = main.getActualPlayer();
         Graphics2D g2d = (Graphics2D)g;
         
         l.load_qdTipo(this.qtdTipo);
@@ -67,7 +67,7 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
         d.drawCruzadores(g2d, tamquadrado, l);
         d.drawCouracado(g2d, tamquadrado, l);
         
-        m.drawMatrix(g, this.mouseX, this.mouseY, 700.0, 80.0, l, p);
+        m.drawMatrix(g, this, this.mouseX, this.mouseY, 700.0, 80.0, l, p);
         
 		b1.setBounds(520, 638, 100, 50);
 		b2.setBounds(520, 638, 100, 50);
@@ -90,8 +90,8 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 //System.out.println("mousePressed at " + point);
 		 this.mouseX = point.x;
 		 this.mouseY = point.y;
-		 
-		 l.mousePressedLogic(this, me, this.mouseX, this.mouseY, tamquadrado, u);
+		 p = main.getActualPlayer();
+		 l.mousePressedLogic(this, me, p, this.mouseX, this.mouseY, tamquadrado, u);
 	}
 
 	public void mouseMoved(MouseEvent me) {
@@ -99,8 +99,8 @@ public class SelectionPanel extends JPanel implements  MouseListener, MouseMotio
 		 //System.out.println("mouseMoved at " + point);
 		 this.mouseX = point.x;
 		 this.mouseY = point.y;
-		 
-		 l.mouseMovedLogic(this, me, this.mouseX, this.mouseY, tamquadrado);
+		 p = main.getActualPlayer();
+		 l.mouseMovedLogic(this, me, p, this.mouseX, this.mouseY, tamquadrado);
 	}
 	
 	//Not used from the interfaces implemented
